@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "669439677014",
+    "project_id": "multimodulecrypto",
+    "storage_bucket": "multimodulecrypto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669439677014:android:9d82cef01ce33de189a1f7",
+        "android_client_info": {
+          "package_name": "com.example.multimodulecrypto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB197M4N_CgxOEriwer6IVEk3F3QReyRjo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
