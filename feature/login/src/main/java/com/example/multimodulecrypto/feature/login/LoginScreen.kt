@@ -10,13 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LoginRoute(navigateToHome: (userId: String) -> Unit) {
-    LoginScreen {
-        navigateToHome("123")
-    }
-}
-
-@Composable
 fun LoginScreen(onClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         OutlinedButton(onClick = onClick) {
@@ -25,8 +18,3 @@ fun LoginScreen(onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginPreview() {
-    LoginScreen {}
-} 

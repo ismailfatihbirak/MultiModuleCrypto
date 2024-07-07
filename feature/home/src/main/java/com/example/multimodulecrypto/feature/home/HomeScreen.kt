@@ -35,14 +35,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.multimodulecrypto.core.model.Root
 
-@Composable
-fun HomeRoute(userId: String) {
-    HomeScreen(userId = userId)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(userId: String, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     LaunchedEffect(true) {
         viewModel.loadGetCrypto()
     }

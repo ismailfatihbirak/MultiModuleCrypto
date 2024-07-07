@@ -4,9 +4,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.welcome"
+    namespace = "com.example.favorite"
 }
 
 dependencies {
-
 }
