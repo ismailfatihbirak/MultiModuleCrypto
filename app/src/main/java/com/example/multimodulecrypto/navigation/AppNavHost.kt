@@ -1,27 +1,61 @@
+@file:Suppress("PLUGIN_IS_NOT_ENABLED")
+
 package com.example.multimodulecrypto.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.multimodulecrypto.feature.home.homeScreen
-import com.example.multimodulecrypto.feature.home.navigateToHome
-import com.example.multimodulecrypto.feature.login.Login
-import com.example.multimodulecrypto.feature.login.loginScreen
-import kotlin.reflect.KClass
+import com.example.detail.DetailScreen
+import com.example.favorite.FavoriteScreen
+import com.example.multimodulecrypto.feature.home.HomeScreen
+import com.example.multimodulecrypto.feature.login.LoginScreen
+import com.example.signup.SignUpScreen
+import com.example.welcome.WelcomeScreen
+import kotlinx.serialization.Serializable
 
+@Serializable
+object WelcomeScreen
+
+@Serializable
+object SignUpScreen
+@Serializable
+object LoginScreen
+
+@Serializable
+object HomeScreen
+@Serializable
+object FavoriteScreen
+
+@Serializable
+object DetailScreen
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    startDestination: KClass<*> = Login::class
 ) {
     val navController = rememberNavController()
     NavHost(
-        modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = WelcomeScreen
     ) {
-        homeScreen()
-        loginScreen(navigateToHome = navController::navigateToHome)
+        composable<WelcomeScreen> {
+            WelcomeScreen(onClick = {navController.navigate(SignUpScreen)})
+        }
+        composable<SignUpScreen> {
+            SignUpScreen()
+        }
+        composable<LoginScreen> {
+            LoginScreen(onClick = {navController.navigate(HomeScreen)})
+        }
+        composable<HomeScreen> {
+            HomeScreen()
+        }
+        composable<FavoriteScreen> {
+            FavoriteScreen()
+        }
+        composable<DetailScreen> {
+            DetailScreen()
+        }
     }
 }
