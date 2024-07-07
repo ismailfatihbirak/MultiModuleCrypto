@@ -9,27 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.detail.DetailScreen
 import com.example.favorite.FavoriteScreen
+import com.example.multimodulecrypto.core.common.Screen
 import com.example.multimodulecrypto.feature.home.HomeScreen
 import com.example.multimodulecrypto.feature.login.LoginScreen
 import com.example.signup.SignUpScreen
 import com.example.welcome.WelcomeScreen
-import kotlinx.serialization.Serializable
 
-@Serializable
-object WelcomeScreen
 
-@Serializable
-object SignUpScreen
-@Serializable
-object LoginScreen
-
-@Serializable
-object HomeScreen
-@Serializable
-object FavoriteScreen
-
-@Serializable
-object DetailScreen
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
@@ -37,24 +23,24 @@ fun AppNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = WelcomeScreen
+        startDestination = Screen.WelcomeScreen
     ) {
-        composable<WelcomeScreen> {
-            WelcomeScreen(onClick = {navController.navigate(SignUpScreen)})
+        composable<Screen.WelcomeScreen> {
+            WelcomeScreen(navController)
         }
-        composable<SignUpScreen> {
-            SignUpScreen()
+        composable<Screen.SignUpScreen> {
+            SignUpScreen(navController = navController)
         }
-        composable<LoginScreen> {
-            LoginScreen(onClick = {navController.navigate(HomeScreen)})
+        composable<Screen.LoginScreen> {
+            LoginScreen(navController = navController)
         }
-        composable<HomeScreen> {
+        composable<Screen.HomeScreen> {
             HomeScreen()
         }
-        composable<FavoriteScreen> {
+        composable<Screen.FavoriteScreen> {
             FavoriteScreen()
         }
-        composable<DetailScreen> {
+        composable<Screen.DetailScreen> {
             DetailScreen()
         }
     }

@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.multimodulecrypto.android.application.compose)
     alias(libs.plugins.multimodulecrypto.android.hilt)
     alias(libs.plugins.google.services.plugin)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -38,6 +37,7 @@ dependencies {
     implementation(projects.feature.signup)
     implementation(projects.feature.detail)
     implementation(projects.feature.favorite)
+    implementation(projects.core.common)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
@@ -45,5 +45,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
 }
