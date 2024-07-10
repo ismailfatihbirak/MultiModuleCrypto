@@ -10,7 +10,7 @@ class CryptoDataSourceImpl @Inject constructor(private val api : CryptoApi)  : C
         return api.getCrypto()
     }
 
-    override suspend fun getAssetIdCrypto(assetId: String): List<RootId> {
+    override suspend fun getAssetIdCrypto(assetId: String): RootId {
         return api.getAssetIdCrypto(assetId)
     }
 }
