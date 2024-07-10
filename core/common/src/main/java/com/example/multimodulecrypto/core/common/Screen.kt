@@ -19,6 +19,8 @@ sealed class Screen {
     @Serializable
     object FavoriteScreen : Screen()
 
-    @Serializable
-    object DetailScreen : Screen()
 }
+@Serializable
+data class DetailScreen(
+    val assetId: String?
+)
