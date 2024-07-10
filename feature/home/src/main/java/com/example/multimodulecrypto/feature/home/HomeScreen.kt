@@ -1,25 +1,25 @@
 package com.example.multimodulecrypto.feature.home
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,104 +31,122 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.multimodulecrypto.core.model.Root
+import androidx.navigation.NavController
+import com.example.design_system.components.BottomNavigationSample
+import com.example.design_system.components.CryptoItem
+import com.example.design_system.components.SwipeToRevealItem
+import com.example.multimodulecrypto.core.common.DetailScreen
+import com.example.multimodulecrypto.core.common.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavController) {
     LaunchedEffect(true) {
         viewModel.loadGetCrypto()
     }
+
     var text by remember { mutableStateOf("") }
     val state = viewModel.state
     val searchList = state.value.cryptos.filter { crypto ->
-        crypto.symbol!!.contains(text, ignoreCase = true) || crypto.name!!.contains(text, ignoreCase = true)}
-    Column (
+        crypto.symbol!!.contains(text, ignoreCase = true) || crypto.name!!.contains(
+            text,
+            ignoreCase = true
+        )
+    }
 
-    ){
-        TextField(
-            value = text,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            label = { Text(text = "Search")},
-            maxLines = 1,
-            shape = RoundedCornerShape(50),
-            leadingIcon = { Icon(imageVector = Icons.Default.Search,
-                contentDescription = null) },
-            onValueChange ={ newText->
-                text = newText
-                if (newText.isNotBlank()){
-                    text = newText
-                }
-            })
-
-        if (state.value.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally)
+    Scaffold(
+        bottomBar = {
+            BottomNavigationSample(
+                homeOnClick = { navController.navigate(Screen.HomeScreen) },
+                favOnClick = { navController.navigate(Screen.FavoriteScreen) },
+                indexarg = 0
             )
-        } else {
-            LazyColumn{
-                items(searchList){
-                    CryptoItem(crypto = it)
+        }, topBar = {
+            TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    titleContentColor = MaterialTheme.colorScheme.secondary,
+                ),
+                title = {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = "CryptoRUIS",
+                            modifier = Modifier.align(Alignment.Center),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
-            }
+            )
         }
-    }
-}
-
-@Composable
-fun CryptoItem(crypto: Root) {
-    //val str = crypto.id_icon
-    //val result = str?.replace("-", "")
-    ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
         ) {
-//            AsyncImage(
-//                model = "https://s3.eu-central-1.amazonaws.com/bbxt-static-icons/type-id/png_64/${result}.png",
-//                contentDescription = "",
-//                modifier = Modifier.size(64.dp)
-//            )
-            Column {
-                Box(modifier = Modifier.width(140.dp)) {
-                    Text(
-                        text = crypto.symbol.toString().uppercase(),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+            TextField(
+                value = text,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                label = { Text(text = "Search") },
+                maxLines = 1,
+                shape = RoundedCornerShape(50),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null
                     )
-                }
-                Text(
-                    text = crypto.name.toString(),
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
+                },
+                onValueChange = { newText ->
+                    text = newText
+                    if (newText.isNotBlank()) {
+                        text = newText
+                    }
+                })
+
+
+            if (state.value.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
-            }
-            Column {
-                Box(modifier = Modifier.width(100.dp)) {
-                    Text(
-                        text = "$"+crypto.currentPrice.toString().take(7),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
+            } else {
+                LazyColumn {
+                    items(searchList) {
+                        SwipeToRevealItem(content = {
+                            CryptoItem(
+                                crypto = it,
+                                onClick = { navController.navigate(DetailScreen(it.id)) },
+                                true
+                            )
+                        }, onClick = {
+                            viewModel.saveFav(
+                                it.id!!,
+                                it.symbol!!,
+                                it.name!!,
+                                it.image!!,
+                                it.currentPrice.toString(),
+                                it.priceChangePercentage24h!!
+                            )
+                        }, true)
+                    }
                 }
             }
         }
     }
-
 }
+
+
+
+
+
+
+
+
 
