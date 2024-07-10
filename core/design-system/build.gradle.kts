@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.multimodulecrypto.android.library)
     alias(libs.plugins.multimodulecrypto.android.library.compose)
+
 }
 
 android {
@@ -9,4 +10,9 @@ android {
 
 dependencies {
     implementation(projects.core.common)
+    implementation(projects.core.model)
+
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.coil)
 }
