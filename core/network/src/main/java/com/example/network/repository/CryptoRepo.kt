@@ -10,7 +10,7 @@ class CryptoRepo @Inject constructor(private val cryptoDataSource: CryptoDataSou
         return cryptoDataSource.getCrypto()
     }
 
-    suspend fun getAssetIdCrypto(assetId: String): List<RootId> {
+    suspend fun getAssetIdCrypto(assetId: String): RootId {
         return cryptoDataSource.getAssetIdCrypto(assetId)
     }
 
