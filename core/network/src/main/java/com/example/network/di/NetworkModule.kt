@@ -1,7 +1,6 @@
 package com.example.network.di
 
 import android.content.Context
-import com.example.network.interceptor.CacheInterceptor
 import com.example.network.repository.CryptoDataSource
 import com.example.network.repository.CryptoDataSourceImpl
 import com.example.network.repository.CryptoRepo
@@ -18,30 +17,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import javax.inject.Singleton
 
-//private const val BASE_URL = "https://rest.coinapi.io/v1/"
 private const val BASE_URL = "https://api.coingecko.com/api/v3/"
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    //    @Provides
-//    @Singleton
-//    fun provideCryptoApi(): CryptoApi {
-//        return Retrofit.Builder().baseUrl(BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//            .create(CryptoApi::class.java)
-//    }
     @Provides
     @Singleton
     fun provideCryptoApi(@ApplicationContext context: Context): CryptoApi {
-        val cacheSize: Long = 10 * 1024 * 1024 // 10 MB
+        val cacheSize: Long = 10 * 1024 * 1024
         val cache = Cache(File(context.cacheDir, "http_cache"), cacheSize)
 
         val okHttpClient = OkHttpClient.Builder()
             .cache(cache)
-            .addInterceptor(CacheInterceptor())
+            .addInterceptor(com.example.network.interceptor.CacheInterceptor())
             .build()
 
         return Retrofit.Builder()
