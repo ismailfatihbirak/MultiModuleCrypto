@@ -2,6 +2,7 @@ package com.example.multimodulecrypto.core.data.firestore_repository
 
 import com.example.multimodulecrypto.core.data.di.DataModule
 import com.example.multimodulecrypto.core.model.Root
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,22 +15,29 @@ import kotlin.coroutines.suspendCoroutine
 class FirestoreDataSourceImpl(
     @DataModule.IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : FirestoreDataSource {
-
+    private val authId = com.google.firebase.Firebase.auth.currentUser!!.uid
     override suspend fun saveFav(
-        authId: String,
-        asset_id: String,
-        id_icon: String,
+        id: String,
+        symbol: String,
         name: String,
-        price_usd: String?
+        image: String,
+        currentPrice: String?,
+        priceChangePercentage: Double
     ): Unit = withContext(ioDispatcher) {
-        val price = price_usd?.toDoubleOrNull() ?: 0.0
-        val fav = Root(asset_id, id_icon, name)
-        //val fav = Root(asset_id, id_icon, name, price)
+        val price = currentPrice?.toDoubleOrNull() ?: 0.0
+        val fav = Root(
+            id = id,
+            symbol = symbol,
+            name = name,
+            image = image,
+            currentPrice = price,
+            priceChangePercentage24h = priceChangePercentage
+        )
         Firebase.firestore.collection("Users").document(authId)
             .collection("FavoriteAssets").add(fav)
     }
 
-    override suspend fun getFavList(authId: String): List<Root> = withContext(ioDispatcher) {
+    override suspend fun getFavList(): List<Root> = withContext(ioDispatcher) {
         suspendCoroutine { continuation ->
             val list = ArrayList<Root>()
             Firebase.firestore.collection("Users").document(authId)
@@ -49,10 +57,10 @@ class FirestoreDataSourceImpl(
         }
     }
 
-    override suspend fun deleteFav(authId: String, asset_id: String): Boolean =
+    override suspend fun deleteFav(symbol: String): Boolean =
         withContext(ioDispatcher) {
             val query = Firebase.firestore.collection("Users").document(authId)
-                .collection("FavoriteAssets").whereEqualTo("asset_id", asset_id)
+                .collection("FavoriteAssets").whereEqualTo("symbol", symbol)
             val result = query.get().await()
             for (document in result.documents) {
                 document.reference.delete()

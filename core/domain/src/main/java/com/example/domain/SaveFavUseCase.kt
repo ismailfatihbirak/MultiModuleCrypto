@@ -8,14 +8,22 @@ class SaveFavUseCase @Inject constructor(
     private val firestoreRepository: FirestoreRepository
 ) {
     suspend operator fun invoke(
-        authId: String,
-        asset_id: String,
-        id_icon: String,
+        id: String,
+        symbol: String,
         name: String,
-        price_usd: String
+        image: String,
+        currentPrice: String?,
+        priceChangePercentage: Double
     ) {
         try {
-            firestoreRepository.saveFav(authId, asset_id, id_icon, name, price_usd)
+            firestoreRepository.saveFav(
+                id,
+                symbol,
+                name,
+                image,
+                currentPrice,
+                priceChangePercentage
+            )
         } catch (e: Exception) {
             Log.e(e.message, e.message.toString())
         }

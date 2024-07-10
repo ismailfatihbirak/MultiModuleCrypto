@@ -5,14 +5,15 @@ import com.example.multimodulecrypto.core.model.Root
 
 interface FirestoreDataSource {
     suspend fun saveFav(
-        authId: String,
-        asset_id: String,
-        id_icon: String,
+        id: String,
+        symbol: String,
         name: String,
-        price_usd: String?
+        image: String,
+        currentPrice: String?,
+        priceChangePercentage: Double
     )
 
-    suspend fun getFavList(authId: String): List<Root>
+    suspend fun getFavList(): List<Root>
 
-    suspend fun deleteFav(authId: String, asset_id: String): Boolean
+    suspend fun deleteFav(symbol: String): Boolean
 }

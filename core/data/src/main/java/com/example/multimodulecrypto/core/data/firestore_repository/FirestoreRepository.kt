@@ -5,21 +5,22 @@ import javax.inject.Inject
 
 class FirestoreRepository @Inject constructor(private val firestoreDataSource: FirestoreDataSource) {
     suspend fun saveFav(
-        authId: String,
-        asset_id: String,
-        id_icon: String,
+        id: String,
+        symbol: String,
         name: String,
-        price_usd: String?
+        image: String,
+        currentPrice: String?,
+        priceChangePercentage: Double
     ) {
-        firestoreDataSource.saveFav(authId, asset_id, id_icon, name, price_usd)
+        firestoreDataSource.saveFav(id, symbol, name, image, currentPrice, priceChangePercentage)
     }
 
-    suspend fun getFavList(authId: String): List<Root> {
-        return firestoreDataSource.getFavList(authId)
+    suspend fun getFavList(): List<Root> {
+        return firestoreDataSource.getFavList()
     }
 
-    suspend fun deleteFav(authId: String, asset_id: String): Boolean {
-        return firestoreDataSource.deleteFav(authId, asset_id)
+    suspend fun deleteFav(symbol: String): Boolean {
+        return firestoreDataSource.deleteFav(symbol)
     }
 
 }
