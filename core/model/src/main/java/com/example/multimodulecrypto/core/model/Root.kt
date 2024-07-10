@@ -2,7 +2,6 @@ package com.example.multimodulecrypto.core.model
 
 import com.google.gson.annotations.SerializedName
 
-
 data class Root (
 
   @SerializedName("id"                               ) var id                           : String?        = null,
