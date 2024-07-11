@@ -41,8 +41,12 @@ fun FavoriteScreen(navController: NavController, viewModel: FavoriteViewModel = 
     Scaffold(
         bottomBar = {
             BottomNavigationSample(
-                homeOnClick = { navController.navigate(Screen.HomeScreen) },
-                favOnClick = { navController.navigate(Screen.FavoriteScreen) },
+                homeOnClick = { navController.navigate(Screen.HomeScreen) {
+                    popUpTo(Screen.FavoriteScreen) { inclusive = true }
+                }},
+                favOnClick = { navController.navigate(Screen.FavoriteScreen){
+                    popUpTo(Screen.FavoriteScreen) { inclusive = true }
+                } },
                 indexarg = 1
             )
         }, topBar = {

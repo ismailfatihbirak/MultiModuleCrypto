@@ -58,8 +58,12 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
     Scaffold(
         bottomBar = {
             BottomNavigationSample(
-                homeOnClick = { navController.navigate(Screen.HomeScreen) },
-                favOnClick = { navController.navigate(Screen.FavoriteScreen) },
+                homeOnClick = { navController.navigate(Screen.HomeScreen){
+                    popUpTo(Screen.HomeScreen) { inclusive = true }
+                }},
+                favOnClick = { navController.navigate(Screen.FavoriteScreen) {
+                    popUpTo(Screen.HomeScreen) { inclusive = true }
+                }},
                 indexarg = 0
             )
         }, topBar = {
