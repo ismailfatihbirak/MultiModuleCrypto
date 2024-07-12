@@ -1,6 +1,5 @@
 package com.example.detail
 
-import com.example.multimodulecrypto.core.model.Root
 import com.example.multimodulecrypto.core.model.RootId
 
 data class DetailState(

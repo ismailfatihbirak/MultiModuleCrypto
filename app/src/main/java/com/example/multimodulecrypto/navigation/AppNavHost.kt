@@ -26,7 +26,7 @@ fun AppNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.HomeScreen
+        startDestination = Screen.WelcomeScreen
     ) {
         composable<Screen.WelcomeScreen> {
             WelcomeScreen(navController)

@@ -31,6 +31,7 @@
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/model" />
             <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/core/notifaction" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/detail" />
             <option value="$PROJECT_DIR$/feature/favorite" />

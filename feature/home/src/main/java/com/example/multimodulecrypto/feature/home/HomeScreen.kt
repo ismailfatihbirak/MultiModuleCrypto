@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +39,7 @@ import com.example.design_system.components.CryptoItem
 import com.example.design_system.components.SwipeToRevealItem
 import com.example.multimodulecrypto.core.common.DetailScreen
 import com.example.multimodulecrypto.core.common.Screen
+import com.example.notifaction.CryptoPriceCheckWorker.Companion.startWork
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +47,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
     LaunchedEffect(true) {
         viewModel.loadGetCrypto()
     }
-
+    val context = LocalContext.current
     var text by remember { mutableStateOf("") }
     val state = viewModel.state
     val searchList = state.value.cryptos.filter { crypto ->
@@ -58,12 +60,16 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
     Scaffold(
         bottomBar = {
             BottomNavigationSample(
-                homeOnClick = { navController.navigate(Screen.HomeScreen){
-                    popUpTo(Screen.HomeScreen) { inclusive = true }
-                }},
-                favOnClick = { navController.navigate(Screen.FavoriteScreen) {
-                    popUpTo(Screen.HomeScreen) { inclusive = true }
-                }},
+                homeOnClick = {
+                    navController.navigate(Screen.HomeScreen) {
+                        popUpTo(Screen.HomeScreen) { inclusive = true }
+                    }
+                },
+                favOnClick = {
+                    navController.navigate(Screen.FavoriteScreen) {
+                        popUpTo(Screen.HomeScreen) { inclusive = true }
+                    }
+                },
                 indexarg = 0
             )
         }, topBar = {
@@ -138,6 +144,8 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
                                 it.currentPrice.toString(),
                                 it.priceChangePercentage24h!!
                             )
+                            startWork(context = context)
+                            //workmanager çağırmayı buraya ekle
                         }, true)
                     }
                 }
