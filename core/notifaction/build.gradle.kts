@@ -13,5 +13,5 @@ dependencies {
     implementation(projects.core.common)
 
     implementation(libs.workmanager)
-
+    implementation(libs.androidx.navigation.compose)
 }

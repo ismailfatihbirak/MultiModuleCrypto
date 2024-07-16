@@ -1,5 +1,6 @@
 package com.example.multimodulecrypto.feature.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,20 +35,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.design_system.components.BottomNavigationSample
 import com.example.design_system.components.CryptoItem
 import com.example.design_system.components.SwipeToRevealItem
 import com.example.multimodulecrypto.core.common.DetailScreen
 import com.example.multimodulecrypto.core.common.Screen
+import com.example.notifaction.CryptoPriceCheckWorker
 import com.example.notifaction.CryptoPriceCheckWorker.Companion.startWork
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavController) {
+    val context = LocalContext.current
+
+
+    val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
+        .setInitialDelay(15, TimeUnit.MINUTES)
+        .build()
+
+    LaunchedEffect (true){
+        WorkManager.getInstance(context).enqueue(request)
+    }
+
+
+
+
     LaunchedEffect(true) {
         viewModel.loadGetCrypto()
     }
-    val context = LocalContext.current
+
     var text by remember { mutableStateOf("") }
     val state = viewModel.state
     val searchList = state.value.cryptos.filter { crypto ->
