@@ -1,43 +1,96 @@
 package com.example.signup
 
 import android.content.Context
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.SignUpUseCase
 import com.example.multimodulecrypto.core.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
 ) : ViewModel() {
-    private val _state = mutableStateOf<SignUpState>(SignUpState())
-    val state: State<SignUpState> = _state
+    private val _uiState = MutableStateFlow(SignUpState())
+    internal val uiState: StateFlow<SignUpState> = _uiState.asStateFlow()
+    private val _uiEvent = MutableSharedFlow<SignUpUiEvent>()
+    internal val uiEvent: SharedFlow<SignUpUiEvent> = _uiEvent.asSharedFlow()
 
-    private fun signUp(email: String, password: String, context: Context) {
-        signUpUseCase(email, password, context).onEach {
+    private fun checkSignUpState() {
+        if (_uiState.value.auth) {
+            viewModelScope.launch {
+                _uiEvent.emit(SignUpUiEvent.NavigateToLoginScreen)
+                _uiEvent.emit(SignUpUiEvent.ShowToast("Sign up successful"))
+            }
+        }
+    }
+
+    private fun signUp(context: Context) {
+        signUpUseCase(_uiState.value.email, _uiState.value.email, context).onEach {
             when (it) {
                 is Resource.Success -> {
-                    _state.value = SignUpState(auth = it.data ?: false)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            auth = it.data ?: false
+                        )
+                    }
+                    checkSignUpState()
                 }
-
                 is Resource.Loading -> {
-                    _state.value = SignUpState(isLoading = true)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isLoading = true
+                        )
+                    }
                 }
-
                 is Resource.Error -> {
-                    _state.value = SignUpState(error = it.message ?: "Error")
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            error = it.message ?: "Error"
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun loadSignUp(email: String, password: String, context: Context) {
-        signUp(email, password, context)
+    internal fun loadSignUp(context: Context) {
+        signUp(context)
+    }
+
+    internal fun onPasswordChange(newPassword: String){
+        _uiState.update { currentState ->
+            currentState.copy(
+                password = newPassword
+            )
+        }
+    }
+
+    internal fun onTfChange(newEmail: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                email = newEmail
+            )
+        }
+    }
+
+    internal fun onToggleShowPassword() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                showPassword = !uiState.value.showPassword
+            )
+        }
     }
 }
+
