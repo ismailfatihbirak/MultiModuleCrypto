@@ -29,7 +29,6 @@ fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel(), navController: Na
 
     if (signUpUiState.auth) {
         LaunchedEffect(Unit) {
-            viewModel.onNavigateToLoginScreen()
             navController.navigate(Screen.LoginScreen)
             Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show()
         }

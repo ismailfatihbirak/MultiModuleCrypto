@@ -22,13 +22,6 @@ class SignUpViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpState())
     internal val uiState: StateFlow<SignUpState> = _uiState.asStateFlow()
-    private val _uiEvent = MutableSharedFlow<SignUpUiEvent>()
-
-    internal fun onNavigateToLoginScreen() {
-        viewModelScope.launch {
-            _uiEvent.emit(SignUpUiEvent.NavigateToLoginScreen("Sign up successful"))
-        }
-    }
 
     private fun signUp(context: Context) {
         signUpUseCase(_uiState.value.email, _uiState.value.email, context).onEach {
