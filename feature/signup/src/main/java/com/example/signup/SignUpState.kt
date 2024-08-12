@@ -8,5 +8,5 @@ data class SignUpState(
     val password: String = "",
     val showPassword: Boolean = false,
     val emailAuthControl: Boolean = false,
-    val signInCompleted: Boolean = false,
+    val signUpCompleted: Boolean = false,
 )
