@@ -8,35 +8,74 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.SignInUseCase
 import com.example.multimodulecrypto.core.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
 ) : ViewModel(){
+    private val _uiState = MutableStateFlow(LoginState())
+    internal val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
 
-    private val _state = mutableStateOf<LoginState>(LoginState())
-    val state: State<LoginState> = _state
-
-    private fun signIn(email:String,password:String,context: Context) {
-        signInUseCase(email, password, context).onEach {
+    private fun signIn(context: Context) {
+        signInUseCase(_uiState.value.email, _uiState.value.email, context).onEach {
             when (it) {
                 is Resource.Success -> {
-                    _state.value = LoginState(auth = it.data ?: false)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            auth = it.data ?: false
+                        )
+                    }
                 }
                 is Resource.Loading -> {
-                    _state.value = LoginState(isLoading = true)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isLoading = true
+                        )
+                    }
                 }
                 is Resource.Error -> {
-                    _state.value = LoginState(error = it.message ?: "Error")
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            error = it.message ?: "Error"
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun loadSignIn(email:String,password:String,context: Context) {
-        signIn(email, password, context)
+    internal fun loadSignIn(context: Context) {
+        signIn(context)
+    }
+
+    internal fun onPasswordChange(newPassword: String){
+        _uiState.update { currentState ->
+            currentState.copy(
+                password = newPassword
+            )
+        }
+    }
+
+    internal fun onTfChange(newEmail: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                email = newEmail
+            )
+        }
+    }
+
+    internal fun onToggleShowPassword() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                showPassword = !uiState.value.showPassword
+            )
+        }
     }
 }
