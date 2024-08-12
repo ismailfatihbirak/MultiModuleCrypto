@@ -8,9 +8,7 @@ import com.example.multimodulecrypto.core.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,14 +23,10 @@ class SignUpViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignUpState())
     internal val uiState: StateFlow<SignUpState> = _uiState.asStateFlow()
     private val _uiEvent = MutableSharedFlow<SignUpUiEvent>()
-    internal val uiEvent: SharedFlow<SignUpUiEvent> = _uiEvent.asSharedFlow()
 
-    private fun checkSignUpState() {
-        if (_uiState.value.auth) {
-            viewModelScope.launch {
-                _uiEvent.emit(SignUpUiEvent.NavigateToLoginScreen)
-                _uiEvent.emit(SignUpUiEvent.ShowToast("Sign up successful"))
-            }
+    internal fun onNavigateToLoginScreen() {
+        viewModelScope.launch {
+            _uiEvent.emit(SignUpUiEvent.NavigateToLoginScreen("Sign up successful"))
         }
     }
 
@@ -45,7 +39,6 @@ class SignUpViewModel @Inject constructor(
                             auth = it.data ?: false
                         )
                     }
-                    checkSignUpState()
                 }
                 is Resource.Loading -> {
                     _uiState.update { currentState ->

@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.design_system.components.EmailTextField
 import com.example.design_system.components.Logo
@@ -25,18 +25,13 @@ import com.example.multimodulecrypto.core.common.Screen
 @Composable
 fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel(), navController: NavController) {
     val context = LocalContext.current
-    val signUpUiState by viewModel.uiState.collectAsState()
+    val signUpUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel.uiEvent) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                is SignUpUiEvent.NavigateToLoginScreen -> {
-                    navController.navigate(Screen.LoginScreen)
-                }
-                is SignUpUiEvent.ShowToast -> {
-                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                }
-            }
+    if (signUpUiState.auth) {
+        LaunchedEffect(Unit) {
+            viewModel.onNavigateToLoginScreen()
+            navController.navigate(Screen.LoginScreen)
+            Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show()
         }
     }
 
