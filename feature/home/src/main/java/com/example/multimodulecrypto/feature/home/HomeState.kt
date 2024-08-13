@@ -6,4 +6,6 @@ data class HomeState(
     val isLoading : Boolean = false,
     val cryptos : List<Root> = listOf(),
     val error : String = "",
-)
+    val text : String = "",
+    val searchList : List<Root> = listOf(),
+    )
