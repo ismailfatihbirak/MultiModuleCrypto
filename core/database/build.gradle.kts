@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.multimodulecrypto.android.library)
     alias(libs.plugins.multimodulecrypto.android.room)
+    alias(libs.plugins.multimodulecrypto.android.hilt)
 }
 
 android {
@@ -8,5 +9,4 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.model)
 }
