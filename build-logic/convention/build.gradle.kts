@@ -18,6 +18,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
+    implementation(libs.androidx.room.gradle.plugin)
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.kotlin.gradlePlugin)
@@ -56,6 +57,10 @@ gradlePlugin {
         register("androidHilt") {
             id = "multimodulecrypto.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "multimodulecrypto.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
         }
     }
 }
