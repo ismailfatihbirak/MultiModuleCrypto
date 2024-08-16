@@ -24,13 +24,19 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeState())
     internal val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
 
+    init {
+        getCrypto()
+    }
+
     private fun getCrypto() {
         getCryptoUseCase().onEach {
             when (it) {
                 is Resource.Success -> {
                     _uiState.update { currentState ->
                         currentState.copy(
-                            cryptos = it.data.orEmpty()
+                            cryptos = it.data.orEmpty(),
+                            searchList = it.data.orEmpty(),
+                            isLoading = false
                         )
                     }
                 }
@@ -67,10 +73,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun loadGetCrypto() {
-        getCrypto()
-    }
-
     fun saveFav(
         id: String,
         symbol: String,
@@ -83,21 +85,22 @@ class HomeViewModel @Inject constructor(
     }
 
     internal fun onValueChange(newText: String) {
-        if (newText.isNotBlank()) {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    text = newText
-                )
-            }
+        _uiState.update { currentState ->
+            currentState.copy(
+                text = newText
+            )
         }
         searchFilter()
     }
 
-    private fun searchFilter(){
+    private fun searchFilter() {
         _uiState.update { currentState ->
             currentState.copy(
                 searchList = _uiState.value.cryptos.filter { crypto ->
-                    crypto.symbol!!.contains(_uiState.value.text, ignoreCase = true) || crypto.name!!.contains(
+                    crypto.symbol!!.contains(
+                        _uiState.value.text,
+                        ignoreCase = true
+                    ) || crypto.name!!.contains(
                         _uiState.value.text,
                         ignoreCase = true
                     )
@@ -106,10 +109,4 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-//    val searchList = _uiState.value.cryptos.filter { crypto ->
-//        crypto.symbol!!.contains(_uiState.value.text, ignoreCase = true) || crypto.name!!.contains(
-//            _uiState.value.text,
-//            ignoreCase = true
-//        )
-//    }
 }

@@ -60,7 +60,6 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
 
     LaunchedEffect(true) {
         WorkManager.getInstance(context).enqueue(request)
-        viewModel.loadGetCrypto()
     }
 
     HomeLayer(
@@ -155,6 +154,7 @@ private fun HomeLayer(
                 },
                 onValueChange = { onValueChange(it) }
             )
+
 
 
             if (state) {
