@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,7 +31,8 @@ fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel(), navController: Na
     if (signUpUiState.auth) {
         LaunchedEffect(Unit) {
             navController.navigate(Screen.LoginScreen)
-            Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,
+                context.getString(R.string.sign_up_successful), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -77,6 +79,6 @@ private fun SignUpLayer(
                 onToggleShowPassword = onToggleShowPassword
             )
         }
-        SignButton(onClick = onClick, "Sign Up")
+        SignButton(onClick = onClick, stringResource(R.string.sign_up))
     }
 }

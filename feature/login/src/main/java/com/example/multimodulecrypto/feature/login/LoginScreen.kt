@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,7 +34,8 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), navController: NavC
     if (signInUiState.auth) {
         LaunchedEffect(Unit) {
             navController.navigate(Screen.HomeScreen)
-            Toast.makeText(context, "Sign in successful", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,
+                context.getString(R.string.sign_in_successful), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -81,7 +83,7 @@ private fun LoginLayer(
         }
         SignButton(
             onClick = onClick,
-            text = "Log in"
+            text = stringResource(R.string.log_in)
         )
     }
 }

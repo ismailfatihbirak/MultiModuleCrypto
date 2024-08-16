@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,7 +62,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                 title = {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
-                            text = "DETAIL",
+                            text = stringResource(com.example.detail.R.string.detail_screen_title),
                             modifier = Modifier.align(Alignment.Center),
                             fontWeight = FontWeight.Bold
                         )
@@ -128,7 +129,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                     }
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "7day",
+                            text = stringResource(com.example.detail.R.string._7day),
                             modifier = Modifier.align(Alignment.Center),
                             fontSize = 16.sp
                         )
@@ -156,7 +157,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                     )
                 }
                 Text(
-                    text = "Description",
+                    text = stringResource(com.example.detail.R.string.description),
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 16.dp),
                     fontWeight = FontWeight.Bold
@@ -213,7 +214,6 @@ fun LineChart(
         drawPath(path = shadowPath, color = shadowColor)
         drawPath(path = path, color = lineColor, style = Stroke(width = lineWidth))
 
-        // Draw the price labels on the Y axis
         val textPaint = android.graphics.Paint().apply {
             color = android.graphics.Color.BLACK
             textSize = 30f
