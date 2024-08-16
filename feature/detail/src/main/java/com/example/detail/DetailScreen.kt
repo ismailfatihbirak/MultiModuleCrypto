@@ -25,6 +25,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,25 +33,42 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.multimodulecrypto.core.common.R
+import com.example.multimodulecrypto.core.model.RootId
 import com.example.multimodulecrypto.core.model.Sparkline7d
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
     LaunchedEffect(true) {
         viewModel.loadGetCrypto(id)
     }
-    val state = viewModel.state
-    val crypto = state.value.cryptos
-    val scrollState = rememberScrollState()
+    val detailUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    DetailLayer(
+        isLoading = detailUiState.isLoading,
+        cryptoId = detailUiState.cryptos
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DetailLayer(
+    modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    cryptoId: RootId,
+) {
+    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,7 +79,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                 title = {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
-                            text = "DETAIL",
+                            text = stringResource(com.example.detail.R.string.detail_screen_title),
                             modifier = Modifier.align(Alignment.Center),
                             fontWeight = FontWeight.Bold
                         )
@@ -71,11 +89,11 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
-            if (state.value.isLoading) {
+            if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(16.dp)
@@ -92,20 +110,20 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
                         AsyncImage(
-                            model = crypto.image!!.large,
+                            model = cryptoId.image!!.large,
                             contentDescription = "",
                             modifier = Modifier.size(56.dp)
                         )
                         Column {
                             Box(modifier = Modifier.width(100.dp)) {
                                 Text(
-                                    text = crypto.name.toString(),
+                                    text = cryptoId.name.toString(),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 18.sp
                                 )
                             }
                             Text(
-                                text = crypto.symbol.toString().uppercase(),
+                                text = cryptoId.symbol.toString().uppercase(),
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 13.sp
                             )
@@ -117,7 +135,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                                     .padding(start = 32.dp)
                             ) {
                                 Text(
-                                    text = "$" + crypto.marketData!!.currentPrice!!.usd.toString()
+                                    text = "$" + cryptoId.marketData!!.currentPrice!!.usd.toString()
                                         .take(7),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 18.sp
@@ -128,21 +146,21 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                     }
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "7day",
+                            text = stringResource(com.example.detail.R.string._7day),
                             modifier = Modifier.align(Alignment.Center),
                             fontSize = 16.sp
                         )
                     }
                     LineChart(
-                        sparkline = crypto.marketData!!.sparkline7d!!,
-                        lineColor = if (crypto.marketData!!.priceChangePercentage7d.toString()
+                        sparkline = cryptoId.marketData!!.sparkline7d!!,
+                        lineColor = if (cryptoId.marketData!!.priceChangePercentage7d.toString()
                                 .take(1) == "-"
                         ) {
                             colorResource(id = R.color.red)
                         } else {
                             colorResource(id = R.color.green)
                         },
-                        shadowColor = if (crypto.marketData!!.priceChangePercentage7d.toString()
+                        shadowColor = if (cryptoId.marketData!!.priceChangePercentage7d.toString()
                                 .take(1) == "-"
                         ) {
                             colorResource(id = R.color.red).copy(
@@ -156,17 +174,16 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), id: String) {
                     )
                 }
                 Text(
-                    text = "Description",
+                    text = stringResource(com.example.detail.R.string.description),
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 16.dp),
                     fontWeight = FontWeight.Bold
                 )
-                Text(text = crypto.description.toString(), modifier = Modifier.padding(16.dp))
+                Text(text = cryptoId.description.toString(), modifier = Modifier.padding(16.dp))
             }
         }
 
     }
-
 }
 
 @Composable
@@ -213,7 +230,6 @@ fun LineChart(
         drawPath(path = shadowPath, color = shadowColor)
         drawPath(path = path, color = lineColor, style = Stroke(width = lineWidth))
 
-        // Draw the price labels on the Y axis
         val textPaint = android.graphics.Paint().apply {
             color = android.graphics.Color.BLACK
             textSize = 30f

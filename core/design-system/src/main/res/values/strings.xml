@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_fav">Favorite</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+</resources>

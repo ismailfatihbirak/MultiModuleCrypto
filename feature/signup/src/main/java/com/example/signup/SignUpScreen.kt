@@ -1,57 +1,65 @@
 package com.example.signup
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.design_system.components.EmailTextField
 import com.example.design_system.components.Logo
 import com.example.design_system.components.PasswordTextField
 import com.example.design_system.components.SignButton
 import com.example.multimodulecrypto.core.common.Screen
-import kotlinx.serialization.Serializable
 
 
 @Composable
 fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel(), navController: NavController) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf(value = "") }
-    var showPassword by remember { mutableStateOf(value = false) }
     val context = LocalContext.current
+    val signUpUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
-    var emailAuthControl by remember { mutableStateOf(false) }
-    emailAuthControl = viewModel.state.value.auth
-    var signInCompleted by remember { mutableStateOf(false) }
-
-
-    if (emailAuthControl && !signInCompleted) {
-        signInCompleted = true
-        navController.navigate(Screen.LoginScreen)
-        Toast.makeText(
-            context,
-            "sign up successful",
-            Toast.LENGTH_SHORT
-        ).show()
+    if (signUpUiState.auth) {
+        LaunchedEffect(Unit) {
+            navController.navigate(Screen.LoginScreen)
+            Toast.makeText(context,
+                context.getString(R.string.sign_up_successful), Toast.LENGTH_SHORT).show()
+        }
     }
 
+    SignUpLayer(
+        email = signUpUiState.email,
+        password = signUpUiState.password,
+        showPassword = signUpUiState.showPassword,
+        onTfChange = {viewModel.onTfChange(it)},
+        onPasswordChange = {viewModel.onPasswordChange(it)},
+        onToggleShowPassword = viewModel::onToggleShowPassword,
+        onClick = { viewModel.loadSignUp(context) })
+
+}
+
+@Composable
+private fun SignUpLayer(
+    modifier: Modifier = Modifier,
+    email: String,
+    password: String,
+    showPassword: Boolean,
+    onPasswordChange: (String) -> Unit,
+    onTfChange: (String) -> Unit,
+    onToggleShowPassword: () -> Unit,
+    onClick: () -> Unit,
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(all = 30.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -61,25 +69,16 @@ fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel(), navController: Na
         Column {
             EmailTextField(
                 tf = email,
-                onTfChange = { newTf ->
-                    email = newTf
-                }
+                onTfChange = onTfChange
             )
 
             PasswordTextField(
                 password = password,
-                onPasswordChange = { newPassword ->
-                    password = newPassword
-                },
+                onPasswordChange = onPasswordChange,
                 showPassword = showPassword,
-                onToggleShowPassword = {
-                    showPassword = !showPassword
-                }
+                onToggleShowPassword = onToggleShowPassword
             )
         }
-        SignButton(onClick = {
-            viewModel.loadSignUp(email, password, context)
-        }, "Sign Up")
+        SignButton(onClick = onClick, stringResource(R.string.sign_up))
     }
-
 }

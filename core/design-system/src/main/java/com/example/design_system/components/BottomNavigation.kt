@@ -11,6 +11,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import com.example.multimodulecrypto.design_system.R
 
 private data class BottomNavigationItem(
     val title: String,
@@ -26,12 +28,12 @@ fun BottomNavigationSample(
 ) {
     val items = listOf(
         BottomNavigationItem(
-            title = "Home",
+            title = stringResource(R.string.bottom_nav_home),
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
         ),
         BottomNavigationItem(
-            title = "Favorite",
+            title = stringResource(R.string.bottom_nav_fav),
             selectedIcon = Icons.Filled.Favorite,
             unselectedIcon = Icons.Outlined.Favorite,
         )
