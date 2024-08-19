@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavController) {
     val context = LocalContext.current
-
+    val state = viewModel.state
 
     val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
         .setInitialDelay(15, TimeUnit.MINUTES)
@@ -59,12 +59,17 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
     }
 
     LaunchedEffect(true) {
-        viewModel.loadGetCrypto()
         viewModel.startCachingWork(context)
+        viewModel.triggerInterceptor()
+        if (state.value.isTriggered){
+            viewModel.getCachedCrypto()
+        }else{
+            viewModel.loadGetCrypto()
+        }
+
     }
 
     var text by remember { mutableStateOf("") }
-    val state = viewModel.state
     val searchList = state.value.cryptos.filter { crypto ->
         crypto.symbol!!.contains(text, ignoreCase = true) || crypto.name!!.contains(
             text,
