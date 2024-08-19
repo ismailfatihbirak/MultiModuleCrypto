@@ -1,5 +1,6 @@
 package com.example.multimodulecrypto.feature.home
 
+import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.GetCryptoUseCase
 import com.example.domain.SaveFavUseCase
 import com.example.multimodulecrypto.core.common.Resource
+import com.example.offlinecache.repository.CacheWorkerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -16,10 +18,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCryptoUseCase: GetCryptoUseCase,
-    private val saveFavUseCase: SaveFavUseCase
+    private val saveFavUseCase: SaveFavUseCase,
+    private val offlineCacheWorkerRepository: CacheWorkerRepository
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<HomeState>(HomeState())
+    private val _state = mutableStateOf(HomeState())
     val state: State<HomeState> = _state
     private fun getCrypto() {
         getCryptoUseCase().onEach {
@@ -53,11 +56,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun loadGetCrypto() {
+    internal fun loadGetCrypto() {
         getCrypto()
     }
 
-    fun saveFav(
+    internal fun saveFav(
         id: String,
         symbol: String,
         name: String,
@@ -66,5 +69,8 @@ class HomeViewModel @Inject constructor(
         priceChangePercentage: Double
     ) {
         saveFavUser(id, symbol, name, image, currentPrice, priceChangePercentage)
+    }
+    internal fun startCachingWork(context: Context) {
+        offlineCacheWorkerRepository.cacheData(context)
     }
 }

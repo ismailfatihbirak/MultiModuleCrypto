@@ -10,5 +10,5 @@ android {
 
 dependencies {
     implementation(projects.core.notifaction)
-
+    implementation(projects.core.offlinecache)
 }

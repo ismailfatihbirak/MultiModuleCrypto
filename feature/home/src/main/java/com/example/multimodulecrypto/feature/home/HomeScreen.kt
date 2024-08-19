@@ -1,6 +1,5 @@
 package com.example.multimodulecrypto.feature.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,7 +42,6 @@ import com.example.design_system.components.SwipeToRevealItem
 import com.example.multimodulecrypto.core.common.DetailScreen
 import com.example.multimodulecrypto.core.common.Screen
 import com.example.notifaction.CryptoPriceCheckWorker
-import com.example.notifaction.CryptoPriceCheckWorker.Companion.startWork
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,11 +58,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
         WorkManager.getInstance(context).enqueue(request)
     }
 
-
-
-
     LaunchedEffect(true) {
         viewModel.loadGetCrypto()
+        viewModel.startCachingWork(context)
     }
 
     var text by remember { mutableStateOf("") }
@@ -163,7 +159,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
                                 it.currentPrice.toString(),
                                 it.priceChangePercentage24h!!
                             )
-                            startWork(context = context)
+                            //startWork(context = context)
                             //workmanager çağırmayı buraya ekle
                         }, true)
                     }

@@ -34,6 +34,7 @@ workmanager = "2.9.0"
 hilt-workmanager = "1.2.0"
 roomGradlePlugin = "2.6.1"
 room = "2.6.1"
+hiltExt = "1.2.0"
 
 
 
@@ -91,6 +92,7 @@ hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hilt-w
 
 # Workmanager
 workmanager = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workmanager"}
+hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 # End
 
 # Kotlin
