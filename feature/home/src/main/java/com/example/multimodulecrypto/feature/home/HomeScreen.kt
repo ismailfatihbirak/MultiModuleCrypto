@@ -23,16 +23,15 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -41,55 +40,72 @@ import com.example.design_system.components.CryptoItem
 import com.example.design_system.components.SwipeToRevealItem
 import com.example.multimodulecrypto.core.common.DetailScreen
 import com.example.multimodulecrypto.core.common.Screen
+import com.example.multimodulecrypto.core.model.Root
 import com.example.notifaction.CryptoPriceCheckWorker
 import java.util.concurrent.TimeUnit
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavController) {
     val context = LocalContext.current
-    val state = viewModel.state
+    val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
 
     val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
         .setInitialDelay(15, TimeUnit.MINUTES)
         .build()
 
-    LaunchedEffect (true){
+    LaunchedEffect(true) {
         WorkManager.getInstance(context).enqueue(request)
     }
 
-    LaunchedEffect(true) {
-        viewModel.startCachingWork(context)
-        viewModel.triggerInterceptor()
-        if (state.value.isTriggered){
-            viewModel.getCachedCrypto()
-        }else{
-            viewModel.loadGetCrypto()
+    HomeLayer(
+        text = homeUiState.text,
+        searchList = homeUiState.searchList,
+        state = homeUiState.isLoading,
+        homeOnClick = {
+            navController.navigate(Screen.HomeScreen) {
+                popUpTo(Screen.HomeScreen) { inclusive = true }
+            }
+        },
+        favOnClick = {
+            navController.navigate(Screen.FavoriteScreen) {
+                popUpTo(Screen.HomeScreen) { inclusive = true }
+            }
+        },
+        onValueChange = { viewModel.onValueChange(it) },
+        itemOnClick = { navController.navigate(DetailScreen(it)) },
+        buttonOnClick = {
+            viewModel.saveFav(
+                it.id!!,
+                it.symbol!!,
+                it.name!!,
+                it.image!!,
+                it.currentPrice.toString(),
+                it.priceChangePercentage24h!!
+            )
         }
 
-    }
+    )
 
-    var text by remember { mutableStateOf("") }
-    val searchList = state.value.cryptos.filter { crypto ->
-        crypto.symbol!!.contains(text, ignoreCase = true) || crypto.name!!.contains(
-            text,
-            ignoreCase = true
-        )
-    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HomeLayer(
+    text: String,
+    searchList: List<Root>,
+    state: Boolean,
+    homeOnClick: () -> Unit,
+    favOnClick: () -> Unit,
+    onValueChange: (String) -> Unit,
+    itemOnClick: (String) -> Unit,
+    buttonOnClick: (Root) -> Unit
+) {
     Scaffold(
         bottomBar = {
             BottomNavigationSample(
-                homeOnClick = {
-                    navController.navigate(Screen.HomeScreen) {
-                        popUpTo(Screen.HomeScreen) { inclusive = true }
-                    }
-                },
-                favOnClick = {
-                    navController.navigate(Screen.FavoriteScreen) {
-                        popUpTo(Screen.HomeScreen) { inclusive = true }
-                    }
-                },
+                homeOnClick = homeOnClick,
+                favOnClick = favOnClick,
                 indexarg = 0
             )
         }, topBar = {
@@ -101,7 +117,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
                 title = {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
-                            text = "CryptoRUIS",
+                            text = stringResource(R.string.home_screen_title),
                             modifier = Modifier.align(Alignment.Center),
                             fontWeight = FontWeight.Bold
                         )
@@ -123,7 +139,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                label = { Text(text = "Search") },
+                label = { Text(text = stringResource(R.string.home_search)) },
                 maxLines = 1,
                 shape = RoundedCornerShape(50),
                 leadingIcon = {
@@ -132,15 +148,12 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
                         contentDescription = null
                     )
                 },
-                onValueChange = { newText ->
-                    text = newText
-                    if (newText.isNotBlank()) {
-                        text = newText
-                    }
-                })
+                onValueChange = { onValueChange(it) }
+            )
 
 
-            if (state.value.isLoading) {
+
+            if (state) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(16.dp)
@@ -149,24 +162,15 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
             } else {
                 LazyColumn {
                     items(searchList) {
-                        SwipeToRevealItem(content = {
-                            CryptoItem(
-                                crypto = it,
-                                onClick = { navController.navigate(DetailScreen(it.id)) },
-                                true
-                            )
-                        }, onClick = {
-                            viewModel.saveFav(
-                                it.id!!,
-                                it.symbol!!,
-                                it.name!!,
-                                it.image!!,
-                                it.currentPrice.toString(),
-                                it.priceChangePercentage24h!!
-                            )
-                            //startWork(context = context)
-                            //workmanager çağırmayı buraya ekle
-                        }, true)
+                        SwipeToRevealItem(
+                            content = {
+                                CryptoItem(
+                                    crypto = it,
+                                    onClick = { it.id?.let { it1 -> itemOnClick(it1) } },
+                                    true
+                                )
+                            }, onClick = { buttonOnClick(it) }, true
+                        )
                     }
                 }
             }

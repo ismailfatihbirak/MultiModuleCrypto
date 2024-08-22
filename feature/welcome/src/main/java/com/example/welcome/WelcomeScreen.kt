@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,7 +46,7 @@ fun WelcomeScreen(navController: NavController) {
         TextButton(
             onClick = { navController.navigate(Screen.SignUpScreen) }) {
             Text(
-                text = "Sign Up With Email",
+                text = stringResource(R.string.sign_up_with_email),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black
@@ -58,11 +59,11 @@ fun WelcomeScreen(navController: NavController) {
         ) {
             TextButton(onClick = { navController.navigate(Screen.LoginScreen) }) {
                 Text(
-                    text = "Already have an account",
+                    text = stringResource(R.string.already_have_an_account),
                     fontSize = 14.sp
                 )
                 Text(
-                    text = " Sign in.",
+                    text = stringResource(R.string.sign_in),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.Black
