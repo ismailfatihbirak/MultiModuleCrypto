@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.domain"
+    namespace = "com.example.multimodulecrypto.domain"
 }
 
 dependencies {
@@ -12,4 +12,5 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.model)
     implementation(projects.core.data)
+    implementation(projects.core.database)
 }

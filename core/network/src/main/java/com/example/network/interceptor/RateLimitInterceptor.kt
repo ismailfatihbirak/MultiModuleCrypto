@@ -1,10 +1,16 @@
 package com.example.network.interceptor
 
+
+import com.example.network.di.RateLimitState
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class RateLimitInterceptor : Interceptor {
+class RateLimitInterceptor @Inject constructor(
+    private val rateLimitState: RateLimitState
+) : Interceptor {
+
     private val requestQueue = mutableListOf<Long>()
     private val maxRequestsPerMinute = 5
 
@@ -14,8 +20,9 @@ class RateLimitInterceptor : Interceptor {
             requestQueue.removeIf { it < now - TimeUnit.MINUTES.toMillis(1) }
 
             if (requestQueue.size >= maxRequestsPerMinute) {
-                val waitTime = TimeUnit.MINUTES.toMillis(1) - (now - requestQueue[0])
-                Thread.sleep(waitTime)
+                rateLimitState.setRateLimitTriggered(true)
+            } else {
+                rateLimitState.setRateLimitTriggered(false)
             }
 
             requestQueue.add(now)
@@ -23,4 +30,9 @@ class RateLimitInterceptor : Interceptor {
 
         return chain.proceed(chain.request())
     }
+
+    fun triggeredRateLimit(): Boolean {
+        return rateLimitState.rateLimitTriggered.value
+    }
 }
+

@@ -61,7 +61,7 @@ class CryptoPriceCheckWorker @AssistedInject constructor(
         getAssetIdCryptoUseCase(assetId).onEach { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    handleCryptoPrice(resource.data, root, notificationHandler)
+//                    handleCryptoPrice(resource.data, root, notificationHandler)
                 }
                 is Resource.Loading -> {
                 }
@@ -71,17 +71,17 @@ class CryptoPriceCheckWorker @AssistedInject constructor(
         }.launchIn(CoroutineScope(Dispatchers.IO))
     }
 
-    fun handleCryptoPrice(cryptoData: RootId?, root: RootId, notificationHandler: NotificationHandler) {
-        cryptoData ?: return
-        val priceUsd = cryptoData.marketData!!.currentPrice!!.usd ?: return
-        val priceChangePercent = (priceUsd - root.marketData!!.currentPrice!!.usd!!) / root.marketData!!.currentPrice!!.usd!! * 100
-        if (priceChangePercent > 0.0001 || priceChangePercent < -0.0001) {
-            notificationHandler.showSimpleNotification(
-                cryptoData.name ?: "",
-                priceChangePercent.toString()
-            )
-        }
-    }
+//    fun handleCryptoPrice(cryptoData: RootId?, root: RootId, notificationHandler: NotificationHandler) {
+//        cryptoData ?: return
+//        val priceUsd = cryptoData.marketData!!.currentPrice!!.usd ?: return
+//        val priceChangePercent = (priceUsd - root.marketData!!.currentPrice!!.usd!!) / root.marketData!!.currentPrice!!.usd!! * 100
+//        if (priceChangePercent > 0.0001 || priceChangePercent < -0.0001) {
+//            notificationHandler.showSimpleNotification(
+//                cryptoData.name ?: "",
+//                priceChangePercent.toString()
+//            )
+//        }
+//    }
 
 
 }

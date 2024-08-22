@@ -2,9 +2,12 @@ package com.example.multimodulecrypto.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.GetAllCryptoRoomUseCase
 import com.example.domain.GetCryptoUseCase
 import com.example.domain.SaveFavUseCase
+import com.example.domain.TriggerInterceptorUseCase
 import com.example.multimodulecrypto.core.common.Resource
+import com.example.offlinecache.repository.CacheWorkerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCryptoUseCase: GetCryptoUseCase,
-    private val saveFavUseCase: SaveFavUseCase
+    private val saveFavUseCase: SaveFavUseCase,
+    private val offlineCacheWorkerRepository: CacheWorkerRepository,
+    private val getAllCryptoRoomUseCase: GetAllCryptoRoomUseCase,
+    private val triggerInterceptorUseCase: TriggerInterceptorUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState())
@@ -74,6 +80,11 @@ class HomeViewModel @Inject constructor(
     }
 
     fun saveFav(
+    internal fun loadGetCrypto() {
+        getCrypto()
+    }
+
+    internal fun saveFav(
         id: String,
         symbol: String,
         name: String,
@@ -109,4 +120,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    internal fun startCachingWork(context: Context) {
+        offlineCacheWorkerRepository.cacheData(context)
+    }
+    internal fun getCachedCrypto() {
+        getAllCryptoRoomUseCase().onEach {
+            _state.value = HomeState(cryptos = it)
+        }.launchIn(viewModelScope)
+    }
+    internal fun triggerInterceptor() {
+        triggerInterceptorUseCase().onEach {
+            _state.value = HomeState(isTriggered = it)
+        }.launchIn(viewModelScope)
+    }
 }

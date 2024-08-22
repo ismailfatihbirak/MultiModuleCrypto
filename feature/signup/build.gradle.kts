@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.signup"
+    namespace = "com.example.multimodulecrypto.signup"
 }
 
 dependencies {

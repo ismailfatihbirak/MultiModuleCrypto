@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.detail"
+    namespace = "com.example.multimodulecrypto.detail"
 }
 
 dependencies {

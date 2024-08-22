@@ -14,4 +14,8 @@ class CryptoRepo @Inject constructor(private val cryptoDataSource: CryptoDataSou
         return cryptoDataSource.getAssetIdCrypto(assetId)
     }
 
+    suspend fun triggerInterceptor(): Boolean {
+        return cryptoDataSource.triggerInterceptor()
+    }
+
 }
