@@ -3,8 +3,9 @@ package com.example.database.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.database.di.tables.cryptoTable
 
-@Entity(tableName = "crypto_table")
+@Entity(tableName = cryptoTable)
 data class RootEntity(
     @PrimaryKey
     var id: String,

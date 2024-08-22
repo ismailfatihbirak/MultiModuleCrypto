@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.favorite"
+    namespace = "com.example.multimodulecrypto.favorite"
 }
 
 dependencies {

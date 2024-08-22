@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.database"
+    namespace = "com.example.multimodulecrypto.database"
 }
 
 dependencies {

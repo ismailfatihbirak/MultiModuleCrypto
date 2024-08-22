@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.database.dao.CryptoDao
 import com.example.database.db.CryptoDatabase
+import com.example.database.di.tables.cryptoDatabaseName
 import com.example.database.repo.RoomRepoImpl
 import com.example.database.repo.RoomRepository
 import dagger.Module
@@ -23,7 +24,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context.applicationContext,
             CryptoDatabase::class.java,
-            "crypto_database"
+            cryptoDatabaseName
         ).build()
     }
 
@@ -38,4 +39,9 @@ object DatabaseModule {
     fun provideRoomRepository(cryptoDao: CryptoDao): RoomRepository {
         return RoomRepoImpl(cryptoDao)
     }
+}
+
+object tables{
+    const val cryptoTable = "crypto_table"
+    const val cryptoDatabaseName = "crypto_database"
 }

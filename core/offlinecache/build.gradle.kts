@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.offlinecache"
+    namespace = "com.example.multimodulecrypto.offlinecache"
 }
 
 dependencies {

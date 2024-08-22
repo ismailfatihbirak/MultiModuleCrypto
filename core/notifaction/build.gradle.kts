@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.notifaction"
+    namespace = "com.example.multimodulecrypto.notifaction"
 }
 
 dependencies {

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.network"
+    namespace = "com.example.multimodulecrypto.network"
 }
 
 dependencies {
