@@ -3,4 +3,6 @@
     <string name="detail_screen_title">DETAIL</string>
     <string name="_7day">7day</string>
     <string name="description">Description</string>
+    <string name="detail">Detail</string>
+    <string name="_7_day">7 day</string>
 </resources>

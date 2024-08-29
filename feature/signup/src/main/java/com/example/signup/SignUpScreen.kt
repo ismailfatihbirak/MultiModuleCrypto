@@ -21,6 +21,7 @@ import com.example.design_system.components.Logo
 import com.example.design_system.components.PasswordTextField
 import com.example.design_system.components.SignButton
 import com.example.multimodulecrypto.core.common.Screen
+import com.example.multimodulecrypto.signup.R
 
 
 @Composable

@@ -79,7 +79,7 @@ private fun DetailLayer(
                 title = {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
-                            text = stringResource(com.example.detail.R.string.detail_screen_title),
+                            text = stringResource(com.example.multimodulecrypto.detail.R.string.detail),
                             modifier = Modifier.align(Alignment.Center),
                             fontWeight = FontWeight.Bold
                         )
@@ -146,7 +146,7 @@ private fun DetailLayer(
                     }
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = stringResource(com.example.detail.R.string._7day),
+                            text = stringResource(com.example.multimodulecrypto.detail.R.string._7_day),
                             modifier = Modifier.align(Alignment.Center),
                             fontSize = 16.sp
                         )
@@ -174,7 +174,7 @@ private fun DetailLayer(
                     )
                 }
                 Text(
-                    text = stringResource(com.example.detail.R.string.description),
+                    text = stringResource(id = com.example.multimodulecrypto.detail.R.string.description),
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 16.dp),
                     fontWeight = FontWeight.Bold

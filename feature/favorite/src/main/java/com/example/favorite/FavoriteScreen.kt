@@ -30,6 +30,7 @@ import com.example.design_system.components.SwipeToRevealItem
 import com.example.multimodulecrypto.core.common.DetailScreen
 import com.example.multimodulecrypto.core.common.Screen
 import com.example.multimodulecrypto.core.model.Root
+import com.example.multimodulecrypto.favorite.R
 
 @Composable
 fun FavoriteScreen(navController: NavController, viewModel: FavoriteViewModel = hiltViewModel()) {

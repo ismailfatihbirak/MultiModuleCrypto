@@ -50,12 +50,16 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
     val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
-    val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
-        .setInitialDelay(15, TimeUnit.MINUTES)
-        .build()
+//    val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
+//        .setInitialDelay(15, TimeUnit.MINUTES)
+//        .build()
+//
+//    LaunchedEffect (true){
+//        WorkManager.getInstance(context).enqueue(request)
+//    }
 
     LaunchedEffect(true) {
-        WorkManager.getInstance(context).enqueue(request)
+        viewModel.startCachingWork(context)
     }
 
     HomeLayer(
