@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.design_system.components.BottomNavigationSample
@@ -42,6 +43,7 @@ import com.example.multimodulecrypto.core.common.DetailScreen
 import com.example.multimodulecrypto.core.common.Screen
 import com.example.multimodulecrypto.core.model.Root
 import com.example.notifaction.CryptoPriceCheckWorker
+import com.example.offlinecache.worker.CacheWorker
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -50,13 +52,16 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavCon
     val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
-//    val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
-//        .setInitialDelay(15, TimeUnit.MINUTES)
-//        .build()
-//
-//    LaunchedEffect (true){
-//        WorkManager.getInstance(context).enqueue(request)
-//    }
+    val request = PeriodicWorkRequestBuilder<CryptoPriceCheckWorker>(15, TimeUnit.MINUTES)
+        .setInitialDelay(1, TimeUnit.MINUTES)
+        .build()
+    LaunchedEffect (true){
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "UniqPriceCheckWork",
+            ExistingPeriodicWorkPolicy.KEEP,
+            request
+        )
+    }
 
     LaunchedEffect(true) {
         viewModel.startCachingWork(context)

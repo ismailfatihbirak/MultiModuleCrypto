@@ -1,11 +1,9 @@
 package com.example.notifaction
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.work.HiltWorker
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.domain.GetAssetIdCryptoUseCase
@@ -19,16 +17,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class CryptoPriceCheckWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted params: WorkerParameters,
-    val getFavUseCase: GetFavUseCase,
-    val getAssetIdCryptoUseCase: GetAssetIdCryptoUseCase
-) : Worker(appContext, params) {
-    override fun doWork(): Result {
+    val getFavUseCase: GetFavUseCase,//Root
+    val getAssetIdCryptoUseCase: GetAssetIdCryptoUseCase//RootId
+) : CoroutineWorker(appContext, params) {
+    override suspend fun doWork(): Result {
         priceCheck()
         return Result.success()
     }
@@ -43,7 +40,7 @@ class CryptoPriceCheckWorker @AssistedInject constructor(
                     val cryptos = resource.data ?: emptyList()
                     favState.value = FavState(cryptos = cryptos)
                     cryptos.forEach { crypto ->
-                        checkCryptoPrice(crypto.id!!, notificationHandler)
+                        checkCryptoPrice(crypto, notificationHandler)
                     }
                 }
                 is Resource.Loading -> {
@@ -56,12 +53,12 @@ class CryptoPriceCheckWorker @AssistedInject constructor(
         }.launchIn(CoroutineScope(Dispatchers.IO))
     }
 
-    fun checkCryptoPrice(rootId: String, notificationHandler: NotificationHandler) {
-        val assetId = rootId ?: return
+    fun checkCryptoPrice(crypto: Root, notificationHandler: NotificationHandler) {
+        val assetId = crypto.id ?: return
         getAssetIdCryptoUseCase(assetId).onEach { resource ->
             when (resource) {
                 is Resource.Success -> {
-//                    handleCryptoPrice(resource.data, root, notificationHandler)
+                    handleCryptoPrice(resource.data, crypto, notificationHandler)
                 }
                 is Resource.Loading -> {
                 }
@@ -71,17 +68,17 @@ class CryptoPriceCheckWorker @AssistedInject constructor(
         }.launchIn(CoroutineScope(Dispatchers.IO))
     }
 
-//    fun handleCryptoPrice(cryptoData: RootId?, root: RootId, notificationHandler: NotificationHandler) {
-//        cryptoData ?: return
-//        val priceUsd = cryptoData.marketData!!.currentPrice!!.usd ?: return
-//        val priceChangePercent = (priceUsd - root.marketData!!.currentPrice!!.usd!!) / root.marketData!!.currentPrice!!.usd!! * 100
-//        if (priceChangePercent > 0.0001 || priceChangePercent < -0.0001) {
-//            notificationHandler.showSimpleNotification(
-//                cryptoData.name ?: "",
-//                priceChangePercent.toString()
-//            )
-//        }
-//    }
+    fun handleCryptoPrice(cryptoDataCurrent: RootId?, rootSave: Root, notificationHandler: NotificationHandler) {
+        cryptoDataCurrent ?: return
+        val priceUsd = cryptoDataCurrent.marketData!!.currentPrice!!.usd ?: return
+        val priceChangePercent = (priceUsd - rootSave.currentPrice!!) / rootSave.currentPrice!! * 100
+        if (priceChangePercent > 0.0001 || priceChangePercent < -0.0001) {
+            notificationHandler.showSimpleNotification(
+                cryptoDataCurrent.name ?: "",
+                priceChangePercent.toString()
+            )
+        }
+    }
 
 
 }

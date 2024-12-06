@@ -14,4 +14,5 @@ dependencies {
 
     implementation(libs.workmanager)
     implementation(libs.androidx.navigation.compose)
+    ksp(libs.hilt.ext.compiler)
 }
