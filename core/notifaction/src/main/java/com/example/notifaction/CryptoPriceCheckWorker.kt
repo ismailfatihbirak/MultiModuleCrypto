@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.domain.GetAssetIdCryptoUseCase
 import com.example.domain.GetFavUseCase
@@ -75,6 +74,7 @@ class CryptoPriceCheckWorker @AssistedInject constructor(
         if (priceChangePercent > 0.0001 || priceChangePercent < -0.0001) {
             notificationHandler.showSimpleNotification(
                 cryptoDataCurrent.name ?: "",
+                cryptoDataCurrent.id ?: "",
                 priceChangePercent.toString()
             )
         }

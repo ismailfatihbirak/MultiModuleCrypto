@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.example.detail.DetailScreen
 import com.example.favorite.FavoriteScreen
@@ -43,10 +44,13 @@ fun AppNavHost(
         composable<Screen.FavoriteScreen> {
             FavoriteScreen(navController = navController)
         }
-        composable<DetailScreen> {
+        composable<DetailScreen>(
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "myapp://coin/detail/{assetId}"
+            })
+        ) {
             val args = it.toRoute<DetailScreen>()
             DetailScreen(id = args.assetId.toString())
         }
     }
 }
-
