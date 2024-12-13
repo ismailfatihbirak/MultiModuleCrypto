@@ -59,8 +59,8 @@ androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "li
 # End
 
 # Test
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test",name ="kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockk = { module = "io.mockk:mockk",name="mockk", version.ref = "mockk" }
 # End
 
 # Room

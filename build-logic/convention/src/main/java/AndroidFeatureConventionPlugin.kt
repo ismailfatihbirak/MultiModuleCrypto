@@ -24,6 +24,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 implementation(libs.findLibrary("kotlinx-serialization-json").get())
                 implementation(libs.findLibrary("hilt_navigation_compose").get())
                 implementation(libs.findLibrary("coil").get())
+                implementation(libs.findLibrary("kotlinx-coroutines-test").get())
+                implementation(libs.findLibrary("mockk").get())
+
             }
         }
     }
