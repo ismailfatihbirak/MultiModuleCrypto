@@ -16,12 +16,12 @@ hilt = "2.51.1"
 hilt_navigation_compose = "1.2.0"
 junit = "1.1.5"
 kotlin = "1.9.23"
-kotlinxCoroutinesTest = "1.6.0"
+kotlinxCoroutinesTest = "1.9.0"
 kotlinxSerializationJson = "1.6.3"
 ksp = "1.9.23-1.0.20"
 appcompat = "1.7.0"
 material = "1.12.0"
-mockk = "1.13.4"
+mockk = "1.13.13"
 playServicesAuth = "21.1.0"
 retrofit = "2.9.0"
 gson = "2.10.1"
@@ -37,6 +37,7 @@ hilt-workmanager = "1.2.0"
 roomGradlePlugin = "2.6.1"
 room = "2.6.1"
 hiltExt = "1.2.0"
+junitKtx = "1.2.1"
 
 
 
@@ -119,6 +120,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 androidx-room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "roomGradlePlugin" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 # End
 
 [plugins]

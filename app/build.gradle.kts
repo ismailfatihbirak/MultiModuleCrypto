@@ -27,7 +27,14 @@ android {
             isShrinkResources = true
         }
     }
-
+    packaging {
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+        )
+        )
+    }
 }
 
 dependencies {

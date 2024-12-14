@@ -38,3 +38,5 @@ include(":core:design-system")
 include(":core:notifaction")
 include(":core:database")
 include(":core:offlinecache")
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+
