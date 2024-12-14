@@ -1,8 +1,5 @@
 package com.example.favorite
 
-import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.DeleteFavUseCase
@@ -27,7 +24,7 @@ class FavoriteViewModel @Inject constructor(
     internal val uiState: StateFlow<FavoriteState> = _uiState.asStateFlow()
 
     init {
-        getFavCrypto()
+        loadGetFavCrypto()
     }
 
     private fun getFavCrypto() {
@@ -56,10 +53,13 @@ class FavoriteViewModel @Inject constructor(
                             error = it.message ?: "Error"
                         )
                     }
-                    Log.e("axax", it.message.toString())
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun loadGetFavCrypto() {
+        getFavCrypto()
     }
 
     private fun deleteFavCrypto(symbol: String) {
