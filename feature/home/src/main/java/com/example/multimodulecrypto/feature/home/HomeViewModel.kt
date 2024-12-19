@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private val triggerInterceptorUseCase: TriggerInterceptorUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeState())
+    internal val _uiState = MutableStateFlow(HomeState())
     internal val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
 
     init {
@@ -100,7 +100,7 @@ class HomeViewModel @Inject constructor(
         searchFilter()
     }
 
-    private fun searchFilter() {
+    internal fun searchFilter() {
         _uiState.update { currentState ->
             currentState.copy(
                 searchList = _uiState.value.cryptos.filter { crypto ->
@@ -120,7 +120,7 @@ class HomeViewModel @Inject constructor(
         offlineCacheWorkerRepository.cacheData(context)
     }
 
-    private fun getCachedCrypto() {
+    internal fun getCachedCrypto() {
         getAllCryptoRoomUseCase().onEach {
             _uiState.update { currentState ->
                 currentState.copy(
@@ -131,7 +131,7 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun triggerInterceptor() {
+    internal fun triggerInterceptor() {
         triggerInterceptorUseCase().onEach {
             _uiState.update { currentState ->
                 currentState.copy(
@@ -146,7 +146,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun loadGetCrypto() {
+    internal fun loadGetCrypto() {
         getCrypto()
     }
 }
