@@ -1,7 +1,5 @@
 import com.android.build.gradle.LibraryExtension
-import com.example.multimodulecrypto.build_logic.convention.androidTestImplementation
 import com.example.multimodulecrypto.build_logic.convention.configureKotlinAndroid
-import com.example.multimodulecrypto.build_logic.convention.libs
 import com.example.multimodulecrypto.build_logic.convention.testImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,11 +18,20 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
+
+                packaging {
+                    resources.excludes.addAll(
+                        listOf(
+                            "META-INF/LICENSE.md",
+                            "META-INF/LICENSE-notice.md",
+                        )
+                    )
+                }
             }
 
             dependencies {
                 testImplementation(kotlin("test"))
-                androidTestImplementation(libs.findLibrary("androidx-junit-ktx").get())            }
+            }
         }
     }
 }

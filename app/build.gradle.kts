@@ -8,6 +8,14 @@ plugins {
 }
 
 android {
+    packaging {
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+        )
+        )
+    }
     namespace = "com.example.multimodulecrypto"
 
     defaultConfig {
@@ -27,14 +35,6 @@ android {
             isShrinkResources = true
         }
     }
-    packaging {
-        resources.excludes.addAll(
-            listOf(
-                "META-INF/LICENSE.md",
-                "META-INF/LICENSE-notice.md",
-        )
-        )
-    }
 }
 
 dependencies {
@@ -49,7 +49,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
 }
