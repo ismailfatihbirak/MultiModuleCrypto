@@ -22,7 +22,7 @@ class SignUpViewModel @Inject constructor(
     internal val uiState: StateFlow<SignUpState> = _uiState.asStateFlow()
 
     private fun signUp(context: Context) {
-        signUpUseCase(_uiState.value.email, _uiState.value.email, context).onEach {
+        signUpUseCase(_uiState.value.email, _uiState.value.password, context).onEach {
             when (it) {
                 is Resource.Success -> {
                     _uiState.update { currentState ->

@@ -1,8 +1,7 @@
 package com.example.multimodulecrypto.feature.login
 
 import android.content.Context
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.SignInUseCase
@@ -20,11 +19,11 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
 ) : ViewModel(){
-    private val _uiState = MutableStateFlow(LoginState())
+    internal val _uiState = MutableStateFlow(LoginState())
     internal val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
 
     private fun signIn(context: Context) {
-        signInUseCase(_uiState.value.email, _uiState.value.email, context).onEach {
+        signInUseCase(_uiState.value.email, _uiState.value.password, context).onEach {
             when (it) {
                 is Resource.Success -> {
                     _uiState.update { currentState ->
