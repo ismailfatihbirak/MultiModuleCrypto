@@ -18,7 +18,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(SignUpState())
+    internal val _uiState = MutableStateFlow(SignUpState())
     internal val uiState: StateFlow<SignUpState> = _uiState.asStateFlow()
 
     private fun signUp(context: Context) {
