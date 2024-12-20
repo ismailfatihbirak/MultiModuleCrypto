@@ -1,5 +1,7 @@
 import com.android.build.gradle.LibraryExtension
 import com.example.multimodulecrypto.build_logic.convention.configureKotlinAndroid
+import com.example.multimodulecrypto.build_logic.convention.implementation
+import com.example.multimodulecrypto.build_logic.convention.libs
 import com.example.multimodulecrypto.build_logic.convention.testImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -31,6 +33,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 testImplementation(kotlin("test"))
+                implementation(libs.findLibrary("kotlinx-coroutines-test").get())
+                implementation(libs.findLibrary("mockk").get())
             }
         }
     }
