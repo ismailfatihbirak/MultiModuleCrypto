@@ -11,4 +11,5 @@ android {
 
 dependencies {
     implementation(libs.accompanist.permissions)
+    implementation(libs.firebase.auth)
 }

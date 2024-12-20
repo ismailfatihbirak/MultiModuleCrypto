@@ -23,11 +23,16 @@ import com.example.multimodulecrypto.welcome.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.firebase.auth.FirebaseAuth
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WelcomeScreen(navController: NavController) {
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    if (currentUser != null) {
+        navController.navigate(Screen.HomeScreen)
+    }
     val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
     LaunchedEffect(key1 = true) {
         if (!postNotificationPermission.status.isGranted) {
