@@ -1,7 +1,5 @@
 package com.example.domain
 
-import com.example.database.model.RootEntity
-import com.example.database.model.SparkLineIn7dEntity
 import com.example.database.repo.RoomRepository
 import com.example.multimodulecrypto.core.model.Root
 import com.example.multimodulecrypto.core.model.SparklineIn7d
