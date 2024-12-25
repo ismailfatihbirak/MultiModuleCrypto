@@ -34,14 +34,14 @@
 
 | Search | notifaction |  
 | ------ | ---------- |  
-|<img src= "docs/search.png" width="250" height="500"/>|<img src= "docs/permis.png" width="250" height="500"/>|
+|<img src= "docs/search.png" width="250" height="500"/>|<img src= "https://github.com/user-attachments/assets/2a5617dc-6cec-4be6-9d60-73f326d0e63c" width="250" height="500"/>|
 
 
 ## Multi Module Dependency Graph
 
 <p align="center">
   <a>
-    <img width=1000, src="docs/project-dependency-graph.png" alt="Module Dependency Graph">
+    <img width=1000, src="https://github.com/user-attachments/assets/490abc6f-105a-4544-8774-1e050939a74a" alt="Module Dependency Graph">
   </a>
 </p>
 
