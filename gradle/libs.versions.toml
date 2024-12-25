@@ -12,6 +12,7 @@ coilCompose = "2.6.0"
 coreKtxVersion = "1.13.1"
 espressoCore = "3.5.1"
 firebaseBom = "32.7.4"
+crashlytics = "3.0.2"
 hilt = "2.51.1"
 hilt_navigation_compose = "1.2.0"
 junit = "1.2.1"
@@ -60,6 +61,8 @@ androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "li
 # End
 
 # Test
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test",name ="kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 mockk = { module = "io.mockk:mockk",name="mockk", version.ref = "mockk" }
 # End
@@ -130,6 +133,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 google-services-plugin = { id = "com.google.gms.google-services", version.ref = "google-services" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 
 
 # Plugins defined by this project

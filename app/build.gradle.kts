@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.multimodulecrypto.android.application.compose)
     alias(libs.plugins.multimodulecrypto.android.hilt)
     alias(libs.plugins.google.services.plugin)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
