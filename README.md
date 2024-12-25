@@ -55,13 +55,25 @@
         - <a href="https://developer.android.com/kotlin/coroutines" target="_blank">Coroutines</a>: Concurrency design pattern that you can use on Android to simplify code that executes asynchronously.
         - <a href="https://kotlinlang.org/docs/reference/coroutines/flow.html" target="_blank">Flow</a>: A flow is an asynchronous version of a Sequence, a type of collection whose values are lazily produced.
         - <a href="https://developer.android.com/jetpack/compose/navigation" target="_blank">Navigation with Compose</a>: Navigation component for Compose.
-    - Firebase
-        - <a href="https://firebase.google.com/products/firestore" target="_blank">Firestore</a>: for database.
-        - <a href="https://firebase.google.com/products/auth" target="_blank">Authentication</a>: for user authentication.
-    - Architecture
-        - Multi-Module Architecture with lots of customized convention plugins (build_logic - app - core - feature)
-        - MVVM Architecture (View - ViewModel - Model)
-        - Clean Architecture approach (Data - Domain - Presentation(ui))
+    - <a href="https://developer.android.com/topic/libraries/architecture/workmanager" target="_blank">WorkManager</a>: For background and deferrable tasks.
+    - <a href="https://developer.android.com/training/data-storage/room" target="_blank">Room</a>: Database for offline support.
+- Firebase
+    - <a href="https://firebase.google.com/products/firestore" target="_blank">Firestore</a>: for database.
+    - <a href="https://firebase.google.com/products/auth" target="_blank">Authentication</a>: for user authentication.
+    - <a href="https://firebase.google.com/products/crashlytics" target="_blank">Crashlytics</a>: for crash reporting and monitoring.
+- Architecture
+    - Multi-Module Architecture with lots of customized convention plugins (build_logic - app - core - feature)
+    - MVVM Architecture (View - ViewModel - Model)
+    - Clean Architecture approach (Data - Domain - Presentation(ui))
+- Open-source Libraries
+    - <a href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank">Coroutines</a>: For managing concurrency.
+    - <a href="https://kotlinlang.org/docs/reference/coroutines/flow.html" target="_blank">Flow</a>: For handling streams of data.
+    - <a href="https://square.github.io/retrofit/" target="_blank">Retrofit</a>: For network calls.
+    - <a href="https://mockk.io/" target="_blank">MockK</a>: For unit testing.
+    - <a href="https://coil-kt.github.io/coil/" target="_blank">Coil</a>: For image loading.
+    - <a href="https://dagger.dev/hilt/" target="_blank">Hilt</a>: For dependency injection.
+    - <a href="https://developer.android.com/topic/libraries/architecture/stateflow" target="_blank">StateFlow</a>: For state management.
+
 
 ## API Reference 
 
