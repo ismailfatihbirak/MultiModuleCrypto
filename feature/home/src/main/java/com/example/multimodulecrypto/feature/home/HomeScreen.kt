@@ -144,7 +144,7 @@ private fun HomeLayer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
